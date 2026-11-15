@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.db
+.vercel/
+.test-tmp*/
+submission.local.md
+spec.html
+
+.vercel
+.env*
+!.env.example

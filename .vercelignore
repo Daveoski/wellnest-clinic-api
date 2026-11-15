@@ -1,0 +1,12 @@
+.git
+.env*
+!.env.example
+.pytest_cache
+.test-tmp*
+__pycache__
+**/__pycache__
+*.db
+tests
+scripts
+submission.local.md
+spec.html
