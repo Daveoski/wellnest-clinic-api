@@ -14,7 +14,7 @@ Each gate ran after the previous gate passed. SQLite and PostgreSQL each passed 
 
 The first PostgreSQL run emitted warnings because pytest could not write its local cache directory under the Windows permission boundary. All tests passed; subsequent commands disable the optional cache provider.
 
-`node --check static/app.js` passed. Vercel built the Flask application with Python 3.12. An authenticated HTTPS check confirmed the deployed API reads 42 available slots from Neon. Public assessor access remains pending approval to disable Vercel SSO on this specific project.
+`node --check static/app.js` passed. Vercel built the Flask application with Python 3.12. An authenticated HTTPS check confirmed the deployed API reads 42 available slots from Neon. After the owner's explicit approval, Vercel SSO was disabled specifically for this project. Public HTTPS checks then confirmed the page and both static assets return 200 without authentication, `/slots` returns 401 for absent or wrong API keys, and the correct API key returns 200 with all 42 persisted slots. These final checks were read-only.
 
 The Edge headless browser check passed: connect, choose slot, book, show confirmation, find history, cancel, and verify the slot becomes available. A 390px mobile viewport had no horizontal overflow; no JavaScript errors occurred. Screenshots are in `artifacts/desktop.png` and `artifacts/mobile.png`. The browser used an HTTPS test origin backed by Flask's test transport and an isolated SQLite database. This verifies browser behavior; it does not claim a browser session against the deployed service. The initial localhost navigation timed out in this environment.
 

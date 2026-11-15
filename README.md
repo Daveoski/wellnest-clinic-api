@@ -2,7 +2,7 @@
 
 Python Flask API and a responsive, accessible booking page, built to the exact [Koya assessment contract](https://koyaacademy.com/assessment-api). The downloaded contract is tracked in `assessment-openapi.json`.
 
-Deployment: https://wellnest-clinic-api.vercel.app (page and API base URL). Public assessor access currently awaits approval to disable Vercel SSO for this project. API endpoints require the separately supplied API key. See `VALIDATION.md` for results and `artifacts/` for desktop and mobile screenshots.
+Deployment: https://wellnest-clinic-api.vercel.app (page and API base URL). Public assessor access is enabled with the owner's explicit approval. API endpoints require the separately supplied API key. See `VALIDATION.md` for results and `artifacts/` for desktop and mobile screenshots.
 
 ## Run locally
 
