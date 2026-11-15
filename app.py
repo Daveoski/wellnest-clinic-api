@@ -17,10 +17,11 @@ from sqlalchemy.pool import NullPool
 from werkzeug.exceptions import HTTPException
 
 load_dotenv()
+app = Flask(__name__, static_folder='static')
 
 
-def create_app(database_url=None, api_key=None, cursor_secret=None):
-    app = Flask(__name__, static_folder='static')
+def create_app(database_url=None, api_key=None, cursor_secret=None, app_instance=None):
+    app = app_instance or Flask(__name__, static_folder='static')
     app.config['MAX_CONTENT_LENGTH'] = 64 * 1024
     key = api_key or os.environ.get('API_KEY')
     if not key:
@@ -70,7 +71,7 @@ def create_app(database_url=None, api_key=None, cursor_secret=None):
     def authenticate():
         if request.path == '/' or request.path.startswith('/static/'):
             return
-        if not hmac.compare_digest(request.headers.get('X-API-Key', ''), key):
+        if not hmac.compare_digest(request.headers.get('X-API-Key', '').encode(), key.encode()):
             return error('invalid API key', 401)
 
     @app.after_request
@@ -244,7 +245,9 @@ def create_app(database_url=None, api_key=None, cursor_secret=None):
 
 
 if os.environ.get('API_KEY') and os.environ.get('DATABASE_URL'):
-    app = create_app()
+    create_app(app_instance=app)
 
 if __name__ == '__main__':
-    create_app().run(host='127.0.0.1', port=5000)
+    if not os.environ.get('API_KEY') or not os.environ.get('DATABASE_URL'):
+        raise RuntimeError('Set API_KEY and DATABASE_URL before starting')
+    app.run(host='127.0.0.1', port=5000)

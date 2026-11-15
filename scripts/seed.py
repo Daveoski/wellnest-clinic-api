@@ -16,6 +16,14 @@ for day in range(7):
         for hour in range(3):
             at = start + timedelta(days=day, hours=hour, minutes=offset * 30)
             slots.append(dict(id=f'd{day}-{offset}-{hour}', provider=doctor, start=at.isoformat(), end=(at+timedelta(minutes=30)).isoformat()))
-req = urllib.request.Request(base + '/reset', data=json.dumps({'slots':slots}).encode(), headers={'Content-Type':'application/json', 'X-API-Key':os.environ['API_KEY']}, method='POST')
-with urllib.request.urlopen(req, timeout=60) as response:
-    print(f'Seeded {len(slots)} demo slots. HTTP {response.status}')
+if base == '--database':
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from app import app
+    with app.test_client() as client:
+        response = client.post('/reset', json={'slots':slots}, headers={'X-API-Key':os.environ['API_KEY']})
+        assert response.status_code == 200, response.json
+        print(f'Seeded {len(slots)} demo slots directly in the configured database.')
+else:
+    req = urllib.request.Request(base + '/reset', data=json.dumps({'slots':slots}).encode(), headers={'Content-Type':'application/json', 'X-API-Key':os.environ['API_KEY']}, method='POST')
+    with urllib.request.urlopen(req, timeout=60) as response:
+        print(f'Seeded {len(slots)} demo slots. HTTP {response.status}')
